@@ -1,8 +1,7 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
+import java.util.Collections;
 
 /**
  * Created by LaunchCode
@@ -11,7 +10,7 @@ public class TechJobs {
 
     private static Scanner in = new Scanner(System.in);
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
 
         // Initialize our field map with key/name pairs
         HashMap<String, String> columnChoices = new HashMap<>();
@@ -46,8 +45,14 @@ public class TechJobs {
                     System.out.println("\n*** All " + columnChoices.get(columnChoice) + " Values ***");
 
                     // Print list of skills, employers, etc
+                    ArrayList<String> listOfItems = new ArrayList<>();
                     for (String item : results) {
-                        System.out.println(item);
+                        listOfItems.add(item);
+                        //System.out.println(item);
+                    }
+                    for (int i = 0; i<listOfItems.size(); i++) {
+                        Collections.sort(listOfItems);
+                        System.out.println(listOfItems.get(i));
                     }
                 }
 
@@ -61,7 +66,8 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    printJobs(JobData.findByValue(searchTerm));
+                    //System.out.println("Search all fields not yet implemented.");
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -103,14 +109,24 @@ public class TechJobs {
                 validChoice = true;
             }
 
-        } while(!validChoice);
+        } while (!validChoice);
 
         return choiceKeys[choiceIdx];
     }
 
     // Print a list of jobs
-    private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
-
-        System.out.println("printJobs is not implemented yet");
+    private static void printJobs(ArrayList<HashMap<String, String>> someJobs){
+        if(someJobs.size() > 0) {
+            for(int i = 0; i < someJobs.size(); i++){
+                System.out.println("*****");
+                for(Map.Entry<String, String> job : someJobs.get(i).entrySet()){
+                    System.out.println(job.getKey() + ": " + job.getValue());
+                }
+                System.out.println("*****\n");
+            }
+        }else {
+            System.out.println("Job not found.");
+        }
+        // System.out.println("printJobs is not implemented yet");
     }
 }
